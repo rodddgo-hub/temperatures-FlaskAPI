@@ -2,6 +2,7 @@ import os
 import psycopg2
 from flask import Flask, request
 from dotenv import load_dotenv
+from datetime import datetime,timezone
 
 #api modules
 import database
@@ -45,7 +46,24 @@ def create_room():
             cursor.execute(database.INSERT_ROOM_RETURN_ID, (name,))
 
             room_id = cursor.fetchone()[0] #returns the query - when room created by the name inserted, this query return her id. 
+    
     return {"id": room_id, "message": f"room {name} created."}, 201 #201 is the status code.
     
+
+@app.post('/api/temperature')
+def add_temp():
+    # Room Name | Room ID | Temperature
+
+    data= request.get_json()
+    temperature= data["temperature"]
+    room_id= data["room"]
+
+    try:
+        date = datetime.strptime(data["date"], "%d-%m-%Y %H:%M")
+        ...
+    except KeyError: #references to: data["key"]
+        data = datetime.now(timezone.utc)
+        ...
+
 
 app.run(host="127.0.0.1", port=3000)
