@@ -1,17 +1,13 @@
 Ambiente virtual
-
 .venv/
-venv/
-env/
 
 Variáveis de ambiente e segredos
-
 .env
 .env.*
 !.env.example
+.flaskenv
 
 Python
-
 pycache/
 *.py[cod]
 *.egg-info/
@@ -19,12 +15,10 @@ pycache/
 .mypy_cache/
 
 Editores
-
 .vscode/
 .idea/
 
 Logs e arquivos temporários
-
 *.log
 .DS_Store
 Thumbs.db
