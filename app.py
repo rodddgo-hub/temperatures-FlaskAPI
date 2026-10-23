@@ -40,7 +40,7 @@ def create_room():
                 cursor.execute(schemas_database.INSERT_ROOM_RETURN_ID, (room_name,))
                 room_id = cursor.fetchone()[0] #returns the query - when room was created by the name inserted, this query return her id. 
     
-    return {"id": room_id, "message": f"room {room_name} created."}, 201 #201 is the status code.
+    return {"id": room_id, "message": f"room {room_name} created."}, 201 
 #-------------------------------------------------------------------------------------------------
 
 
@@ -48,25 +48,22 @@ def create_room():
 
 @app.post('/api/temperature')
 def add_temp():
-
-
     data= request.get_json()
-    INSERT_TEMP = schemas_database.INSERT_TEMP 
-
-    # Room Name | Temperature
-    temperature = data["temperature"]
-    room_id = data["room"]
-
-    # Date
-    try:
-        date = datetime.strptime(data["date"], "%D-%m-%Y %H:%M")
     
-    except KeyError: #references to: data["key"]
+    # Room Name | Temperature | Date
+    room_id = data["room"]
+    temperature = data["temperature"]
+
+    try:
+        date = datetime.strptime(data["date"], "%m-%d-%Y %H:%M:%S")
+
+    except KeyError: #references to: data["date"] was empty
         date = datetime.now(timezone.utc)
 
-
-    with conn.cursor() as cursor:
-        cursor.execute(INSERT_TEMP, (room_id, temperature, date))
+    INSERT_TEMP = schemas_database.INSERT_TEMP 
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute(INSERT_TEMP, (room_id, temperature, date))
     return {"message":"temperature added"}, 201
 #-------------------------------------------------------------------------------------------------
 
